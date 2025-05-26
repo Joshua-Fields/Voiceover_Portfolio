@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Amelia Jane — Voiceover & Singing</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+  <!-- Main stylesheet -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+
+  <!-- GSAP core + plugins -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/ScrollTrigger.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/ScrollSmoother.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/ScrollToPlugin.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/MotionPathPlugin.min.js"></script>
+
+
+
+  <!-- Main JS (deferred) -->
+  <script defer src="{{ url_for('static', filename='js/script.js') }}"></script>
+</head>
+<body>
+
+  <!-- Mobile Hamburger Menu (initially hidden) -->
+  <nav class="mobile-menu">
+  <ul>
+      <li><a href="#about">About Me</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#work">My Work</a></li>
+      <li><a href="#quote">Get a Quote</a></li>
+  </ul>
+  </nav>
+
+  <div class="smooth-wrapper">
+    <div class="smooth-content">
+
+      <!-- Hero Section -->
+      <header class="hero">
+      <div id="top-nav-wrapper">
+          <!-- hamburger button -->
+          <button class="burger" aria-label="Toggle menu">
+          <span class="burger-line"></span>
+          <span class="burger-line"></span>
+          <span class="burger-line"></span>
+          </button>
+
+          <!-- this is the title we’ll shrink -->
+          <h1 id="hero-title">Amelia Jane</h1>
+      </div>
+
+    <p class="tagline">Voiceover Artist & Singer</p>
+    </header>
+
+      <!-- About Section -->
+      <section id="about" class="section about">
+        <div class="about-content">
+            <div class="about-text">
+            <h2 class="about-title">About Me</h2>
+            <p>
+                Hi, I’m Amelia! A passionate voiceover artist and singer bringing stories to life. I love crafting unique characters and delivering powerful vocal performances for every project.
+            </p>
+            </div>
+        </div>
+      </section>
+
+      <!-- Services Section -->
+      <section id="services" class="section services" aria-label="Our services">
+        <svg
+          id="services-svg"
+          class="services-svg"
+          viewBox="0 -30 300 360"
+          overflow="visible"
+          xmlns="http://www.w3.org/2000/svg"
+          role="img"
+          aria-labelledby="services-title"
+        >
+          <title id="services-title">Services</title>
+      
+          <!-- circle path for text -->
+          <path id="services-circle"
+                d="M150,50 a100,100 0 1,1 -0.1,0"
+                fill="none" />
+      
+          <!-- mic icon -->
+          <g id="mic-icon" stroke="#333" stroke-width="4" fill="none">
+            <rect x="135" y="90" width="30" height="80" rx="15" ry="15"/>
+            <line x1="150" y1="170" x2="150" y2="210"/>
+            <path d="M120,210 h60 a30,30 0 0,1 -60,0"/>
+          </g>
+      
+          <!-- “SERVICES” on the circle path -->
+          <text text-anchor="middle"
+                dominant-baseline="middle"
+                font-size="24"
+                fill="#333">
+            <textPath href="#services-circle"
+                      startOffset="0%"
+                      dy="8">
+              SERVICES
+            </textPath>
+          </text>
+        </svg>
+      
+        <div class="service-list">
+          <div class="service-item">
+            <h3>Voiceover</h3>
+            <p>Commercial, narration, character voices.</p>
+          </div>
+          <div class="service-item">
+            <h3>Live Gigs</h3>
+            <p>Concerts, events, and private performances.</p>
+          </div>
+        </div>
+      </section>
+
+
+
+      
+
+      <!-- Work Section -->
+      <section id="work" class="section work">
+        <h2>My Work</h2>
+        <div class="portfolio-grid">
+          <div class="portfolio-item">
+            <audio controls src="/static/audio/sample-voiceover.mp3"></audio>
+          </div>
+        </div>
+      </section>
+
+      <!-- Quote Section -->
+      <section id="quote" class="section quote">
+        <h2>Get a Quote</h2>
+        <form id="quote-form" action="{{ url_for('quote') }}" method="post">
+          <input type="text" name="name" placeholder="Your Name" required />
+          <input type="email" name="email" placeholder="Your Email" required />
+          <textarea name="details" placeholder="Project Details" required></textarea>
+          <button type="submit">Submit</button>
+        </form>
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            <div class="flash">{{ messages[0] }}</div>
+          {% endif %}
+        {% endwith %}
+      </section>
+
+      <!-- Footer -->
+      <footer class="footer">
+        <p>&copy; 2025 Amelia Jane. All rights reserved.</p>
+      </footer>
+
+    </div>
+  </div>
+</body>
+</html>

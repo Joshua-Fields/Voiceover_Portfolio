@@ -1,0 +1,421 @@
+/* ----------------------------------------
+   Base & Reset
+---------------------------------------- */
+html, body {
+  margin: 0;
+  padding: 0;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: #FFF9C4;
+  color: #333;
+}
+
+/* ----------------------------------------
+   Hero Section
+---------------------------------------- */
+.hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background: #FFA726;
+  text-align: center;
+  overflow: visible;
+}
+
+#hero-title {
+  font-size: clamp(6rem, 12vw, 10rem);
+  margin: 0;
+  color: #fff;
+}
+
+/* we already wrap each letter in .char via JS */
+.char {
+  display: inline-block;
+}
+
+.tagline {
+  color: #fff;
+  font-size: 1.25rem;
+  margin-top: 3rem;
+}
+
+/* ----------------------------------------
+   Navigation Bar
+---------------------------------------- */
+.main-nav {
+  background: #FFF3E0;
+  position: relative;
+}
+
+.main-nav ul {
+  display: flex;
+  justify-content: center;
+  list-style: none;
+  padding: 1rem 0;
+  margin: 0;
+}
+
+.main-nav li {
+  margin: 0 1rem;
+}
+
+.main-nav a {
+  position: relative;
+  display: inline-block;
+  color: #333;
+  text-decoration: none;
+  font-weight: 600;
+  padding: 0.25rem 0;
+}
+
+/* underline grow-on-hover */
+.main-nav a::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  width: 100%;
+  height: 3px;
+  background: #FFA726;
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 0.3s ease;
+}
+
+.main-nav a:hover::after {
+  transform: scaleX(1);
+}
+
+/* slight scale bounce on hover */
+.main-nav a:hover {
+  cursor: pointer;
+  transform: scale(1.1);
+  transition: transform 0.2s ease;
+}
+
+/* ----------------------------------------
+   Section Defaults
+---------------------------------------- */
+.section {
+  padding: 4rem 2rem;
+}
+
+/* ----------------------------------------
+   About Section
+---------------------------------------- */
+.about-title {
+  font-size: clamp(3rem, 8vw, 6rem);
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+/* prepare each letter for jello animation */
+.about-title .char {
+  display: inline-block;
+  opacity: 0;
+}
+
+.about p {
+  font-size: 1.125rem;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* ----------------------------------------
+   Services Section
+---------------------------------------- */
+.services .service-list {
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+}
+
+.service-item {
+  background: #fff;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  text-align: center;
+  width: 200px;
+}
+
+/* ----------------------------------------
+   Work Section
+---------------------------------------- */
+.portfolio-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1.5rem;
+}
+
+/* ----------------------------------------
+   Quote Section
+---------------------------------------- */
+.quote form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.quote button {
+  padding: 0.75rem;
+  border: none;
+  background: #FFA726;
+  color: #fff;
+  font-size: 1rem;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background 0.3s ease;
+}
+
+.quote button:hover {
+  background: #e58e00;
+}
+
+/* ----------------------------------------
+   Flash Message
+---------------------------------------- */
+.flash {
+  text-align: center;
+  margin-top: 1rem;
+  color: #2E7D32;
+}
+
+/* ----------------------------------------
+   Footer
+---------------------------------------- */
+.footer {
+  text-align: center;
+  padding: 2rem 0;
+  background: #FFF3E0;
+}
+/* --- Snake & Ball styles --- */
+#snake-wrapper {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  overflow: visible;
+}
+#snake {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 100%; height: 200px;
+}
+
+#about {
+  position: relative;
+  overflow: hidden;
+}
+
+
+/* ScrollSmoother containers */
+.smooth-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.smooth-content {
+  min-height: 100%;
+  /* make sure content can overflow for scrolling */
+}
+
+
+/* --- Hamburger button --- */
+/* --- Top nav wrapper --- */
+#top-nav-wrapper {
+  position: relative;      /* so burger can sit absolute inside */
+  width: 100%;
+  height: 4rem;            /* final “nav bar” height */
+  display: flex;
+  align-items: center;     /* vertical center the title */
+  justify-content: center; /* horizontal center the title */
+  z-index: 10;
+}
+
+/* --- Hamburger button --- */
+.burger {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 2rem;
+  height: 2rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 0;
+  z-index: 11;             /* above the title */
+}
+
+/* burger lines unchanged */
+.burger-line {
+  display: block;
+  width: 100%;
+  height: 3px;
+  background: #333;
+  border-radius: 2px;
+  transition: transform 0.3s, opacity 0.3s;
+}
+.burger.active .burger-line:nth-child(1) {
+  transform: translateY(8px) rotate(45deg);
+}
+.burger.active .burger-line:nth-child(2) {
+  opacity: 0;
+}
+.burger.active .burger-line:nth-child(3) {
+  transform: translateY(-8px) rotate(-45deg);
+}
+
+/* mobile-menu unchanged */
+
+
+/* --- Mobile menu overlay --- */
+.mobile-menu {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 0;
+  height: 100vh;
+  background: rgba(255, 255, 255, 0.95);
+  overflow: hidden;
+  transition: width 0.3s ease;
+  z-index: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.mobile-menu ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  text-align: center;
+}
+.mobile-menu li {
+  margin: 1rem 0;
+}
+.mobile-menu a {
+  font-size: 1.5rem;
+  text-decoration: none;
+  color: #333;
+  font-weight: 600;
+}
+.mobile-menu.open {
+  width: 60%; /* or 100% for full-screen menu */
+}
+
+#about-image {
+  display: block;
+  max-width: 300px;       /* or whatever fits your design */
+  width: 100%;
+  margin: 0 auto 2rem;    /* center + space below */
+  opacity: 0;
+  transform: translateX(-100px); /* start shifted left */
+}
+
+/* 2-column About on desktop, single-column on mobile */
+.about-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+}
+
+@media (min-width: 768px) {
+  .about-content {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  .about-text {
+    flex: 1;
+    max-width: 55%;
+  }
+
+  #about-image {
+    flex: 1;
+    max-width: 40%;
+    margin: 0;             /* remove bottom margin */
+    opacity: 0;            /* keep ready for scroll-in */
+    transform: translateX(100px);
+  }
+}
+
+/* keep the image offscreen initially (even on mobile) */
+#about-image {
+  display: block;
+  width: 80%;
+  max-width: 300px;
+  margin: 0 auto 2rem;
+  opacity: 0;
+  transform: translateX(100px);
+}
+
+
+#about {
+  --bg-blur: 20px;  
+  position: relative;
+  padding: 4rem 2rem;
+  /* keep your gradient overlay only here */
+  background: linear-gradient(
+    to right,
+    rgba(255,255,255,0.95) 0%,
+    rgba(255,255,255,0) 50%
+  );
+  overflow: hidden;
+}
+
+/* the actual photo lives in ::before, covers the right half */
+#about::before {
+  content: "";
+  position: absolute;
+  top: 0; bottom: 0;
+  left: 50%; right: 0;
+  background:
+    url('/static/images/sideProfile.png') no-repeat center center;
+  background-size: cover;
+  filter: blur(var(--bg-blur, 20px));
+  will-change: filter;
+  z-index: 0;
+}
+
+/* make sure your content sits on top */
+.about-content, .about-text, .about-title, .about-text p {
+  position: relative;
+  z-index: 1;
+}
+
+.services-svg {
+  display: block;
+  margin: 0 auto 2rem;
+  max-width: 300px;
+  width: 100%;
+  height: auto;
+  overflow: visible !important;
+  position: relative;    /* so z-index will work if you need to stack it */
+  z-index: 1;
+  
+}
+#services-circle {
+  stroke: none; /* hide the circle itself */
+}
+
+/* Make sure the mic group is visible */
+#mic-icon {
+  opacity: 1 !important;
+}
+
