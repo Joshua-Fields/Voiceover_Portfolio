@@ -136,13 +136,62 @@ body {
 }
 
 .service-item {
-  background: #fff;
+  background: #FFA726; /* orange */
+  color: #fff;
   padding: 1.5rem;
-  border-radius: 8px;
+  border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
   text-align: center;
   width: 200px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
 }
+
+.service-item audio,
+.service-item video {
+  cursor: default;
+}
+
+.service-item:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+}
+
+.section.services {
+  position: relative;
+  overflow: hidden;
+}
+
+
+
+.service-details {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.5s ease, padding 0.3s ease, opacity 0.4s ease, transform 0.4s ease;
+  padding: 0;
+  opacity: 0;
+  transform: translateY(-10px);
+  color: #fff;
+}
+
+/* 🔥 When expanded */
+.service-item.expanded .service-details {
+  max-height: 1000px; /* Big enough for all content */
+  padding: 1rem 0;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.arrow {
+  display: inline-block;
+  margin-left: 0.5rem;
+  transition: transform 0.3s ease;
+}
+
+.service-item.expanded .arrow {
+  transform: rotate(180deg);
+}
+
 
 /* ----------------------------------------
    Work Section
@@ -419,3 +468,83 @@ body {
   opacity: 1 !important;
 }
 
+.floating-notes {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: visible;
+  z-index: 0;
+}
+
+.note {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  fill: #333;
+  opacity: 0.6;
+}
+
+.floating-notes .note {
+  display: none; /* hide template notes */
+}
+
+#waveform-bars rect {
+  filter: blur(1px);
+  fill: #333;
+}
+
+#mic-hover-area.glow {
+  filter: drop-shadow(0 0 8px #FFA726);
+  transition: filter 0.3s ease;
+}
+
+
+/* Audio files */
+.voice-samples {
+  margin-top: 1.5rem;
+}
+
+.voice-samples h4 {
+  color: #ffffff;
+  margin-top: 1rem;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.voice-samples audio {
+  display: block;
+  width: 100%;
+  max-width: 400px;
+  margin: 0.5rem 0 1rem;
+  background: white;
+  border-radius: 6px;
+}
+
+
+
+
+/* Video Files */
+.gig-videos {
+  margin-top: 1.5rem;
+}
+
+.gig-videos h4 {
+  color: #FFA726;
+  margin-top: 1rem;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.video-embed {
+  margin: 1rem 0;
+}
+
+.video-embed iframe,
+.video-embed video {
+  max-width: 100%;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}

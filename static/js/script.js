@@ -217,7 +217,7 @@ window.addEventListener('DOMContentLoaded', () => {
     scrollTrigger: {
       trigger: '#services-svg',
       start:   'top 80%',
-      end:     'top 50%',
+      end:     '+=500',
       scrub:   true
     }
   });
@@ -243,10 +243,150 @@ window.addEventListener('DOMContentLoaded', () => {
 
   // Animate single “SERVICES” once around, stopping at top-center
   servicesTL.to('#services-svg textPath', {
-    attr: { startOffset: '100%' },
+    attr: { startOffset: '50%' },
     duration: 1,
     ease: 'none'
   }, 0);
+
+  // Expandable SERVICES box
+  document.querySelectorAll('.service-item').forEach(item => {
+    item.addEventListener('click', (e) => {
+      // Prevent toggle if clicking on interactive elements
+      if (['AUDIO', 'VIDEO', 'IFRAME', 'A', 'BUTTON'].includes(e.target.tagName)) return;
+
+      const details = item.querySelector('.service-details');
+      const isExpanded = item.classList.contains('expanded');
+
+      // Close other expanded items
+      document.querySelectorAll('.service-item.expanded').forEach(openItem => {
+        if (openItem !== item) {
+          openItem.classList.remove('expanded');
+          openItem.querySelector('.service-details').style.maxHeight = null;
+        }
+      });
+
+      // Toggle current item
+      if (isExpanded) {
+        item.classList.remove('expanded');
+        details.style.maxHeight = null;
+      } else {
+        item.classList.add('expanded');
+        details.style.maxHeight = details.scrollHeight + "px";
+      }
+    });
+  });
+
+
+  function spawnFloatingNote() {
+    const section = document.querySelector('.floating-notes');
+    
+    // Clone a random note
+    const templates = section.querySelectorAll('.note');
+    const note = templates[Math.floor(Math.random() * templates.length)].cloneNode(true);
+  
+    // Random horizontal start and float distance
+    const xStart = Math.random() * window.innerWidth;
+    const yStart = window.innerHeight + 50;
+    const driftX = Math.random() * 100 - 50; // slight left/right drift
+    const scale = 0.8 + Math.random() * 0.6;
+  
+    // Apply randomized style BEFORE adding to DOM
+    note.style.position = 'absolute';
+    note.style.left = `${xStart}px`;
+    note.style.top = `${yStart}px`;
+    note.style.transform = `scale(${scale})`;
+    note.style.opacity = 0; 
+    note.style.display = 'block';
+
+    section.appendChild(note);
+  
+    // Animate it upwards
+    gsap.to(note, {
+      y: -window.innerHeight - 100,
+      x: `+=${driftX}`,
+      opacity: 1,
+      duration: 6 + Math.random() * 3,
+      ease: 'sine.out',
+      onComplete: () => note.remove()
+    });
+  }
+
+  // Launch notes periodically
+  setInterval(spawnFloatingNote, 800);
+
+
+  const waveformBars = gsap.utils.toArray('#waveform-bars rect');
+  let pulseTweens = [];
+  
+  const mic = document.getElementById('mic-hover-area'); // ✅ Define before use
+  
+  // Store original positions once
+  const barData = waveformBars.map(bar => ({
+    el: bar,
+    originalHeight: parseFloat(bar.getAttribute('height')),
+    originalY: parseFloat(bar.getAttribute('y'))
+  }));
+  
+  function startWaveformPulse({ heightBoost = 15, yOffset = 10, speed = 0.6 }) {
+    pulseTweens.forEach(t => t.kill());
+    pulseTweens = [];
+  
+    barData.forEach(({ el, originalHeight, originalY }, i) => {
+      gsap.set(el, {
+        attr: {
+          height: originalHeight,
+          y: originalY
+        }
+      });
+  
+      const tween = gsap.to(el, {
+        attr: {
+          height: originalHeight + Math.random() * heightBoost,
+          y: originalY - yOffset
+        },
+        repeat: -1,
+        yoyo: true,
+        ease: 'sine.inOut',
+        duration: speed + Math.random() * 0.4,
+        delay: i * 0.1
+      });
+  
+      pulseTweens.push(tween);
+    });
+  }
+  
+  // Start gentle pulse on scroll
+  gsap.from('#waveform-bars', {
+    opacity: 0,
+    duration: 2.5,
+    ease: 'power2.out',
+    scrollTrigger: {
+      trigger: '#services-svg',
+      start: 'top 60%',
+      once: true,
+      onEnter: () => startWaveformPulse({})
+    }
+  });
+  
+  // Mic hover glow + waveform boost
+  mic.addEventListener('mouseenter', () => {
+    startWaveformPulse({
+      heightBoost: 40,
+      yOffset: 20,
+      speed: 0.3
+    });
+    mic.classList.add('glow');
+  });
+  
+  mic.addEventListener('mouseleave', () => {
+    startWaveformPulse({});
+    mic.classList.remove('glow');
+  });
+  
+  
+  
+  
+  
 
 
 }); // end DOMContentLoaded
