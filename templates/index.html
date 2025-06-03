@@ -26,9 +26,7 @@
   <script defer src="{{ url_for('static', filename='js/script.js') }}"></script>
 
   <!--Transition Arrow-->
-  <h3 class="service-header">
-    Voiceover <span class="arrow">▼</span>
-  </h3>
+
   
 </head>
 <body>
@@ -66,12 +64,23 @@
       <!-- About Section -->
       <section id="about" class="section about">
         <div class="about-content">
-            <div class="about-text">
+          <div class="about-image-frame">
+            <img
+              src="{{ url_for('static', filename='images/faceShot.png') }}"
+              alt="Amelia Jane Headshot"
+              class="about-headshot"
+            />
+          </div>
+
+          <!-- RIGHT: heading + paragraph -->
+          <div class="about-text">
             <h2 class="about-title">About Me</h2>
             <p>
-                Hi, I’m Amelia! A passionate voiceover artist and singer bringing stories to life. I love crafting unique characters and delivering powerful vocal performances for every project.
+              Hi, I’m Amelia! As a passionate voiceover artist and singer, I bring characters and stories to life with every recording.
+              Whether it’s a commercial, narration, or character role, I deliver authentic, memorable performances that resonate.
+              Outside the studio, you’ll find me exploring new vocal techniques, collaborating on indie animation projects, or performing live.
             </p>
-            </div>
+          </div>
         </div>
       </section>
 
@@ -88,7 +97,7 @@
             <text x="0" y="20" font-size="20">🎤</text>
           </svg>
         </div>
-    
+
         <svg
           id="services-svg"
           class="services-svg"
@@ -110,16 +119,16 @@
             <rect x="173" y="265" width="4" height="30" rx="2" fill="#81C784" />
             <rect x="183" y="270" width="4" height="20" rx="2" fill="#FFA726" />
           </g>
-          
-          
-          
-          
-      
+
+
+
+
+
           <!-- circle path for text -->
           <path id="services-circle"
                 d="M150,250 a100,100 0 1,1 0.1,0"
                 fill="none" />
-      
+
           <!-- mic icon -->
           <g id="mic-hover-area">
             <g id="mic-icon" stroke="#333" stroke-width="4" fill="none">
@@ -128,19 +137,19 @@
               <path d="M120,210 h60 a30,30 0 0,1 -60,0"/>
             </g>
           </g>
-          
-      
+
+
           <!-- “SERVICES” on the circle path -->
           <text text-anchor="middle" font-size="24" fill="#333">
             <textPath href="#services-circle" startOffset="0%" dominant-baseline="central">
               SERVICES
             </textPath>
           </text>
-          
-          
+
+
 
         </svg>
-      
+
         <div class="service-list">
           <div class="service-item">
             <h3 class="service-header">Voiceover</h3>
@@ -149,24 +158,24 @@
               <p>
                 From brand commercials to character voices in animations and games, my voiceover work spans a wide range of tones and audiences.
               </p>
-          
+
               <div class="voice-samples">
                 <h4>Corporate</h4>
                 <audio controls src="/static/audio/corporate1.mp3"></audio>
                 <audio controls src="/static/audio/corporate2.mp3"></audio>
-          
+
                 <h4>Playful</h4>
                 <audio controls src="/static/audio/playful1.mp3"></audio>
                 <audio controls src="/static/audio/playful2.mp3"></audio>
-          
+
                 <h4>Character</h4>
                 <audio controls src="/static/audio/character1.mp3"></audio>
                 <audio controls src="/static/audio/character2.mp3"></audio>
               </div>
             </div>
           </div>
-          
-          
+
+
           <div class="service-item">
             <h3 class="service-header">Live Gigs</h3>
             <p>Concerts, events, and private performances.</p>
@@ -174,10 +183,10 @@
               <p>
                 Whether it’s a private function, festival, or corporate event, I bring energy and emotion to every live performance.
               </p>
-          
+
               <div class="gig-videos">
                 <h4>Live Performances</h4>
-          
+
                 <!-- YouTube Embed -->
                 <div class="video-embed">
                   <iframe
@@ -189,7 +198,7 @@
                     allowfullscreen
                   ></iframe>
                 </div>
-          
+
                 <!-- Local MP4 File -->
                 <div class="video-embed">
                   <video controls width="100%">
@@ -200,14 +209,14 @@
               </div>
             </div>
           </div>
-          
-          
+
+
         </div>
       </section>
 
 
 
-      
+
 
       <!-- Work Section -->
       <section id="work" class="section work">

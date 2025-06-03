@@ -131,12 +131,22 @@ window.addEventListener('DOMContentLoaded', () => {
     trigger: '.hero',
     start:   'bottom top',
     end:     'bottom top+=1',
-    onEnter:    () => gsap.to('#hero-title', { color: '#333', duration: 0.2 }),
-    onLeaveBack:() => gsap.to('#hero-title', { color: '#fff', duration: 0.2 })
+    onEnter: () => {
+      // 1) Turn the hero title dark
+      gsap.to('#hero-title', { color: '#333', duration: 0.2 });
+      // 2) Turn the burger lines black
+      gsap.to('.burger-line', { background: '#333', duration: 0.2 });
+    },
+    onLeaveBack: () => {
+      // 1) Turn the hero title white
+      gsap.to('#hero-title', { color: '#fff', duration: 0.2 });
+      // 2) Turn the burger lines white
+      gsap.to('.burger-line', { background: '#fff', duration: 0.2 });
+    }
   });
 
   // ------------------------------------------------
-  // 8) About Section Animation
+  // 8) About Section Animation (title + paragraph)
   // ------------------------------------------------
   const aboutSection = document.querySelector('#about');
   const aboutTitle   = aboutSection.querySelector('.about-title');
@@ -279,27 +289,27 @@ window.addEventListener('DOMContentLoaded', () => {
 
   function spawnFloatingNote() {
     const section = document.querySelector('.floating-notes');
-    
+
     // Clone a random note
     const templates = section.querySelectorAll('.note');
     const note = templates[Math.floor(Math.random() * templates.length)].cloneNode(true);
-  
+
     // Random horizontal start and float distance
     const xStart = Math.random() * window.innerWidth;
     const yStart = window.innerHeight + 50;
     const driftX = Math.random() * 100 - 50; // slight left/right drift
     const scale = 0.8 + Math.random() * 0.6;
-  
+
     // Apply randomized style BEFORE adding to DOM
     note.style.position = 'absolute';
     note.style.left = `${xStart}px`;
     note.style.top = `${yStart}px`;
     note.style.transform = `scale(${scale})`;
-    note.style.opacity = 0; 
+    note.style.opacity = 0;
     note.style.display = 'block';
 
     section.appendChild(note);
-  
+
     // Animate it upwards
     gsap.to(note, {
       y: -window.innerHeight - 100,
@@ -317,20 +327,20 @@ window.addEventListener('DOMContentLoaded', () => {
 
   const waveformBars = gsap.utils.toArray('#waveform-bars rect');
   let pulseTweens = [];
-  
+
   const mic = document.getElementById('mic-hover-area'); // ✅ Define before use
-  
+
   // Store original positions once
   const barData = waveformBars.map(bar => ({
     el: bar,
     originalHeight: parseFloat(bar.getAttribute('height')),
     originalY: parseFloat(bar.getAttribute('y'))
   }));
-  
+
   function startWaveformPulse({ heightBoost = 15, yOffset = 10, speed = 0.6 }) {
     pulseTweens.forEach(t => t.kill());
     pulseTweens = [];
-  
+
     barData.forEach(({ el, originalHeight, originalY }, i) => {
       gsap.set(el, {
         attr: {
@@ -338,7 +348,7 @@ window.addEventListener('DOMContentLoaded', () => {
           y: originalY
         }
       });
-  
+
       const tween = gsap.to(el, {
         attr: {
           height: originalHeight + Math.random() * heightBoost,
@@ -350,11 +360,11 @@ window.addEventListener('DOMContentLoaded', () => {
         duration: speed + Math.random() * 0.4,
         delay: i * 0.1
       });
-  
+
       pulseTweens.push(tween);
     });
   }
-  
+
   // Start gentle pulse on scroll
   gsap.from('#waveform-bars', {
     opacity: 0,
@@ -367,7 +377,7 @@ window.addEventListener('DOMContentLoaded', () => {
       onEnter: () => startWaveformPulse({})
     }
   });
-  
+
   // Mic hover glow + waveform boost
   mic.addEventListener('mouseenter', () => {
     startWaveformPulse({
@@ -377,16 +387,47 @@ window.addEventListener('DOMContentLoaded', () => {
     });
     mic.classList.add('glow');
   });
-  
+
   mic.addEventListener('mouseleave', () => {
     startWaveformPulse({});
     mic.classList.remove('glow');
   });
-  
-  
-  
-  
-  
+
+  // ------------------------------------------------
+  // 10) Animate Headshot Frame + About Text on Scroll
+  // ------------------------------------------------
+  ScrollTrigger.create({
+    trigger: "#about",
+    start:   "top 75%",
+    onEnter: () => {
+      // Grab the actual DOM nodes here (instead of passing a selector string to gsap)
+      const frameEl = document.querySelector(".about-image-frame");
+      const textEl  = document.querySelector(".about-text");
+
+      // Only animate if they exist
+      if (frameEl) {
+        gsap.to(frameEl, {
+          opacity: 1,
+          scale:   1,
+          rotate:  0,
+          duration: 0.8,
+          ease:    "power3.out"
+        });
+      }
+
+      if (textEl) {
+        gsap.to(textEl, {
+          opacity: 1,
+          y:       0,
+          duration: 0.8,
+          ease:    "power3.out",
+          delay:   0.2
+        });
+      }
+    }
+  });
+
+
 
 
 }); // end DOMContentLoaded

@@ -22,7 +22,10 @@ body {
   align-items: center;
   justify-content: center;
   height: 100vh;
-  background: #FFA726;
+  background:
+    linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)),
+    url('/static/images/sideProfile.png') center center no-repeat;
+  background-size: cover;
   text-align: center;
   overflow: visible;
 }
@@ -106,29 +109,100 @@ body {
 }
 
 /* ----------------------------------------
-   About Section
+   About Section (Headshot + Text)
 ---------------------------------------- */
-.about-title {
-  font-size: clamp(3rem, 8vw, 6rem);
-  margin-bottom: 1rem;
-  color: #333;
+/* 1) Parent styling */
+#about {
+  background-color: #FFF9C4; /* same as body background */
+  overflow: hidden;          /* contain transforms */
+  padding: 4rem 2rem;
 }
 
-/* prepare each letter for jello animation */
-.about-title .char {
-  display: inline-block;
-  opacity: 0;
-}
-
-.about p {
-  font-size: 1.125rem;
-  max-width: 600px;
+/* 2) Flex container: stacked on mobile, two‐column on desktop */
+.about-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  max-width: 1000px;
   margin: 0 auto;
 }
+
+@media (min-width: 768px) {
+  .about-content {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+
+/* 3) Image frame: white border + drop‐shadow + slight border‐radius */
+.about-image-frame {
+  flex-shrink: 0;
+  width: 250px;               /* frame size on mobile */
+  height: 250px;
+  border: 8px solid #fff;     /* thick white “frame” */
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  overflow: hidden;           /* crop the img to this rectangle */
+  transform-origin: center center;
+  /* start invisible & slightly rotated for scroll animation */
+  opacity: 0;
+  transform: scale(0.8) rotate(-10deg);
+  transition: transform 0.6s ease, opacity 0.6s ease;
+}
+
+@media (min-width: 768px) {
+  .about-image-frame {
+    width: 300px;             /* slightly bigger on desktop */
+    height: 300px;
+  }
+}
+
+/* 4) Responsive headshot inside the frame */
+.about-headshot {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;           /* fill the frame without distortion */
+}
+
+/* 5) Text column */
+.about-text {
+  text-align: center;         /* centered on mobile */
+  max-width: 600px;
+  opacity: 0;                 /* start hidden, then animate in */
+  transform: translateY(30px);
+  transition: transform 0.6s ease, opacity 0.6s ease;
+}
+
+@media (min-width: 768px) {
+  .about-text {
+    text-align: left;         /* left-align on desktop */
+  }
+}
+
+/* 6) Heading & paragraph styling */
+.about-title {
+  font-size: clamp(2.5rem, 6vw, 4rem);
+  margin-bottom: 1rem;
+  color: #333;
+  line-height: 1.1;
+}
+
+.about-text p {
+  font-size: 1.125rem;
+  line-height: 1.6;
+  color: #333;
+  margin: 0 auto;
+}
+
+
 
 /* ----------------------------------------
    Services Section
 ---------------------------------------- */
+
 .services .service-list {
   display: flex;
   gap: 2rem;
@@ -140,10 +214,26 @@ body {
   color: #fff;
   padding: 1.5rem;
   border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   text-align: center;
+
+  /* 1) COLLAPSED STATE = 200×200 square */
   width: 200px;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  height: 200px;
+  overflow: hidden;
+
+  /* 2) Make it a flex container so header/text stay centered */
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* center header vertically */
+  align-items: center;     /* center header horizontally */
+
+  /* 3) Animate transform, box-shadow, width, and height */
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    width 0.4s ease,
+    height 0.4s ease;
   cursor: pointer;
 }
 
@@ -154,7 +244,7 @@ body {
 
 .service-item:hover {
   transform: scale(1.05);
-  box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
 }
 
 .section.services {
@@ -163,20 +253,86 @@ body {
 }
 
 
-
+/* ------------------------------------------------------------
+   HIDE “details” BY DEFAULT (vertical accordion style)
+------------------------------------------------------------ */
 .service-details {
   max-height: 0;
   overflow: hidden;
-  transition: max-height 0.5s ease, padding 0.3s ease, opacity 0.4s ease, transform 0.4s ease;
+  transition:
+    max-height 0.5s ease,
+    padding 0.3s ease,
+    opacity 0.4s ease,
+    transform 0.4s ease;
   padding: 0;
   opacity: 0;
   transform: translateY(-10px);
   color: #fff;
 }
 
-/* 🔥 When expanded */
+/* ------------------------------------------------------------
+   CENTER DETAIL CONTENT & GIVE AUDIO A SET WIDTH
+   (so it doesn’t get squashed when the parent uses flex centering)
+------------------------------------------------------------ */
+.service-item .service-details {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Force each audio player to occupy ~80% of the card’s width */
+.service-details audio {
+  display: block;
+  width: 80%;       /* primary width once src is present */
+  min-width: 300px; /* ensure it isn’t rendered as a tiny stub */
+  margin: 0.5rem auto;
+}
+
+/* 3) VIDEO elements (for <video> tags) */
+.service-details video {
+  display: block;
+  width: 80%;         /* same 80% fill behavior as audio */
+  min-width: 300px;   /* so it doesn’t shrink too small if no src yet */
+  height: auto;       /* let height scale proportionally */
+  margin: 0.5rem auto;
+}
+
+/* 4) YOUTUBE EMBEDS (usually an <iframe>) */
+.service-details iframe {
+  display: block;
+  width: 80%;         /* fill ~80% of the parent container */
+  min-width: 300px;   /* ensure the player isn’t a tiny stub */
+  aspect-ratio: 16 / 9;/* maintain a 16:9 ratio for YouTube videos */
+  margin: 0.5rem auto;
+}
+
+/* 🔥 WHEN EXPANDED: Grow to 800px wide & let height expand 🔥 */
+.service-item.expanded {
+  /* 1) Grow from 200px → 800px */
+  width: 800px;
+
+  /* 2) Let height auto-expand to fit header + .service-details */
+  height: auto;
+
+  /* NOTE: do NOT re-declare “transition:” here—
+     that would remove the base rule’s transform/box-shadow/height animations. */
+}
+
+/* 3) PUSH LEFT CARD (nth-child(1)) OUTWARD
+      by (800 − 200)/2 = 300px so it doesn’t eat into center gap */
+.services .service-list > .service-item:nth-child(1).expanded {
+  margin-left: -300px;
+}
+
+/* 4) PUSH RIGHT CARD (nth-child(2)) OUTWARD
+      by (800 − 200)/2 = 300px so it grows only to the right */
+.services .service-list > .service-item:nth-child(2).expanded {
+  margin-right: -300px;
+}
+
+/* 5) REVEAL THE DETAILS VERTICALLY */
 .service-item.expanded .service-details {
-  max-height: 1000px; /* Big enough for all content */
+  max-height: 1000px; /* big enough to show all your audio players/text */
   padding: 1rem 0;
   opacity: 1;
   transform: translateY(0);
@@ -188,9 +344,13 @@ body {
   transition: transform 0.3s ease;
 }
 
+/* Flip the arrow when the card is expanded */
 .service-item.expanded .arrow {
   transform: rotate(180deg);
 }
+
+
+
 
 
 /* ----------------------------------------
@@ -260,10 +420,7 @@ body {
   width: 100%; height: 200px;
 }
 
-#about {
-  position: relative;
-  overflow: hidden;
-}
+
 
 
 /* ScrollSmoother containers */
@@ -315,10 +472,17 @@ body {
   display: block;
   width: 100%;
   height: 3px;
-  background: #333;
+  background: #fff;
   border-radius: 2px;
   transition: transform 0.3s, opacity 0.3s;
 }
+
+
+/* When .burger has the “scrolled” class, show black lines */
+.burger.scrolled .burger-line {
+  background: #333;
+}
+
 .burger.active .burger-line:nth-child(1) {
   transform: translateY(8px) rotate(45deg);
 }
@@ -328,6 +492,7 @@ body {
 .burger.active .burger-line:nth-child(3) {
   transform: translateY(-8px) rotate(-45deg);
 }
+
 
 /* mobile-menu unchanged */
 
@@ -366,87 +531,7 @@ body {
   width: 60%; /* or 100% for full-screen menu */
 }
 
-#about-image {
-  display: block;
-  max-width: 300px;       /* or whatever fits your design */
-  width: 100%;
-  margin: 0 auto 2rem;    /* center + space below */
-  opacity: 0;
-  transform: translateX(-100px); /* start shifted left */
-}
 
-/* 2-column About on desktop, single-column on mobile */
-.about-content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2rem;
-}
-
-@media (min-width: 768px) {
-  .about-content {
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: flex-start;
-  }
-
-  .about-text {
-    flex: 1;
-    max-width: 55%;
-  }
-
-  #about-image {
-    flex: 1;
-    max-width: 40%;
-    margin: 0;             /* remove bottom margin */
-    opacity: 0;            /* keep ready for scroll-in */
-    transform: translateX(100px);
-  }
-}
-
-/* keep the image offscreen initially (even on mobile) */
-#about-image {
-  display: block;
-  width: 80%;
-  max-width: 300px;
-  margin: 0 auto 2rem;
-  opacity: 0;
-  transform: translateX(100px);
-}
-
-
-#about {
-  --bg-blur: 20px;  
-  position: relative;
-  padding: 4rem 2rem;
-  /* keep your gradient overlay only here */
-  background: linear-gradient(
-    to right,
-    rgba(255,255,255,0.95) 0%,
-    rgba(255,255,255,0) 50%
-  );
-  overflow: hidden;
-}
-
-/* the actual photo lives in ::before, covers the right half */
-#about::before {
-  content: "";
-  position: absolute;
-  top: 0; bottom: 0;
-  left: 50%; right: 0;
-  background:
-    url('/static/images/sideProfile.png') no-repeat center center;
-  background-size: cover;
-  filter: blur(var(--bg-blur, 20px));
-  will-change: filter;
-  z-index: 0;
-}
-
-/* make sure your content sits on top */
-.about-content, .about-text, .about-title, .about-text p {
-  position: relative;
-  z-index: 1;
-}
 
 .services-svg {
   display: block;
@@ -457,7 +542,7 @@ body {
   overflow: visible !important;
   position: relative;    /* so z-index will work if you need to stack it */
   z-index: 1;
-  
+
 }
 #services-circle {
   stroke: none; /* hide the circle itself */
