@@ -202,11 +202,70 @@ body {
 /* ----------------------------------------
    Services Section
 ---------------------------------------- */
+/* Make the Services section background black */
+/* Make the whole #services background black and text white */
+/* ----------------------------------------
+   Services Section (image flush left)
+---------------------------------------- */
+
+/* Make the entire #services background black, text white */
+#services {
+  background-color: #000;
+  color: #fff;
+}
+
+/* 1) .services-wrapper now spans full width, no centering */
+.services-wrapper {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin: 0; /* remove any auto-centering or max-width */
+}
+
+/* 2) LEFT column: background image touches left edge */
+.services-image {
+  width: 100%;             /* on mobile, full width */
+  min-height: 700px;       /* ensure we see it on narrow screens */
+  background: url('/static/images/Standalone_BW.png') no-repeat left;
+  background-size: contain;
+}
+
+/* 3) RIGHT column: your floating notes / SVG / cards */
+.services-main {
+  width: 100%;            /* on mobile, also full width below the image */
+  padding: 2rem;
+}
+
+/* 4) On desktop (≥768px), split into two equal halves */
+@media (min-width: 768px) {
+  .services-wrapper {
+    flex-direction: row;
+  }
+  .services-image {
+    width: 50%;
+    min-height: 500px;       /* match height with the right column */
+    background-position: left center; /* keep the image pinned to left */
+  }
+  .services-main {
+    width: 50%;
+    max-width: 600px;        /* optional: keep the content from stretching too wide */
+    padding: 2rem;
+  }
+}
+
+/* 5) Darken cards so they stand out on pure black */
+.services-main .service-item {
+  background-color: #111;
+}
+
+
+
 
 .services .service-list {
   display: flex;
   gap: 2rem;
   justify-content: center;
+
 }
 
 .service-item {
@@ -573,7 +632,13 @@ body {
 }
 
 .floating-notes .note {
-  display: none; /* hide template notes */
+  position: absolute;   /* JS will set exact left/top */
+  width: 120px;          /* increased from 48px */
+  height: 120px;         /* increased from 48px */
+  border-radius: 50%;   /* circular crop */
+  object-fit: cover;    /* ensure headshot fills the circle */
+  opacity: 0;           /* start invisible—JS fades to 1 */
+  display: none;        /* hide the template */
 }
 
 #waveform-bars rect {

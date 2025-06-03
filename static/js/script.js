@@ -290,27 +290,35 @@ window.addEventListener('DOMContentLoaded', () => {
   function spawnFloatingNote() {
     const section = document.querySelector('.floating-notes');
 
-    // Clone a random note
+    // Clone a random <div class="note"> polaroid template
     const templates = section.querySelectorAll('.note');
     const note = templates[Math.floor(Math.random() * templates.length)].cloneNode(true);
 
-    // Random horizontal start and float distance
+    // Random horizontal start (just off‐screen)
     const xStart = Math.random() * window.innerWidth;
     const yStart = window.innerHeight + 50;
-    const driftX = Math.random() * 100 - 50; // slight left/right drift
+
+    // Small drift left/right once floating
+    const driftX = Math.random() * 100 - 50;
+
+    // Random scale between 0.8 and 1.4
     const scale = 0.8 + Math.random() * 0.6;
 
-    // Apply randomized style BEFORE adding to DOM
+    // Random tilt between -10° and +10°
+    const rotate = Math.random() * 20 - 10;
+
+    // Apply styles before inserting
     note.style.position = 'absolute';
     note.style.left = `${xStart}px`;
     note.style.top = `${yStart}px`;
-    note.style.transform = `scale(${scale})`;
+    // Start rotated & scaled
+    note.style.transform = `scale(${scale}) rotate(${rotate}deg)`;
     note.style.opacity = 0;
-    note.style.display = 'block';
+    note.style.display = 'block';  // show the clone
 
     section.appendChild(note);
 
-    // Animate it upwards
+    // Animate floating up, drifting, and fading in
     gsap.to(note, {
       y: -window.innerHeight - 100,
       x: `+=${driftX}`,
@@ -321,8 +329,9 @@ window.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Launch notes periodically
-  setInterval(spawnFloatingNote, 800);
+  // Spawn one every 2 seconds (2000 ms)
+  setInterval(spawnFloatingNote, 2000);
+
 
 
   const waveformBars = gsap.utils.toArray('#waveform-bars rect');
